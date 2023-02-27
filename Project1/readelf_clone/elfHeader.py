@@ -4,7 +4,14 @@ BYTE = 1
 HALFWORD = 2
 WORD = 4
 DOUBLEWORD = 8
+
 class Header:
+    # Initializes the header object and unpacks the bytes sequentially with the corresponding size from documention.
+    # Source: 
+    #    https://refspecs.linuxbase.org/elf/gabi4+/
+    #    https://wiki.osdev.org/ELF_Tutorial
+    #    https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+    #    https://man7.org/linux/man-pages/man5/elf.5.html
     def __init__(self, elf) -> None:
         self.e_ident = {
             'ei_mag0': struct.unpack('B', elf.read(BYTE))[0],
@@ -38,12 +45,14 @@ class Header:
         self.e_shentsize= struct.unpack('H', elf.read(HALFWORD))[0]
         self.e_shnum = struct.unpack('H', elf.read(HALFWORD))[0]
         self.e_shstrndx= struct.unpack('H', elf.read(HALFWORD))[0]
+
+        # Raises and exception and exits if the file is not an ELF
         identifier = format(self.e_ident['ei_mag0'], 'x') + format(self.e_ident['ei_mag1'], 'x') + format(self.e_ident['ei_mag2'], 'x') + format(self.e_ident['ei_mag3'], 'x')
         if identifier != '7f454c46':
             raise Exception('This is not an ELF file')
     
     # Prints the stored attributes in the header object and returns them in a similar format to the readelf command.
-    # Developer Note: There is a cleaner way to do this. It does work though!
+    # Source: Visually inspecting readelf results
     def getHeader(self):
         outputDict = {
             "Magic: ": self.getMagic(),
@@ -68,20 +77,22 @@ class Header:
         }
 
         for key,value in outputDict.items():
-            print('%-36s %-30s' %(key, value))
-
-
-    def getMagic(self):
-        magic = ''.join(str(format(self.e_ident[item], '02x') + " ") for item in self.e_ident) + "00 "*6
-        return magic
-    
+            print('\t%-36s %-30s' %(key, value))
+            
+    # Matches the valueKey (typically an attibute of the object) with the corresponding key in the corresponding dictionary
     def safeget(self, attributeKey, valueKey):
         try:
             message = hDictionary[attributeKey][valueKey]
         except KeyError:
                 return "Unknown"
         return message
+    
+    # The following get methods provides vital fields from the header for other classes in the program
 
+    def getMagic(self):
+        magic = ''.join(str(format(self.e_ident[item], '02x') + " ") for item in self.e_ident) + "00 "*6
+        return magic
+    
     def getProgramHeaderOffset(self):
         return self.e_phoff
 

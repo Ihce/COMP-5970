@@ -37,9 +37,9 @@ class SymbolTable():
     
     def getSymbolTable(self):
         number = 0
-        print('%-5s %-8s %-6s %-8s %-8s %-10s %-6s %-8s' %('Num:', 'Value', 'Size', 'Type', 'Bind', 'Vis', 'Ndx', 'Name'))
+        print('\t%-5s %-8s %-6s %-8s %-8s %-10s %-6s %-8s' %('Num:', 'Value', 'Size', 'Type', 'Bind', 'Vis', 'Ndx', 'Name'))
         for entry in self.entries:
-            print('%-5s %-8s %-6s %-8s %-8s %-10s %-6s %-8s' 
+            print('\t%-5s %-8s %-6s %-8s %-8s %-10s %-6s %-8s' 
                     %(
                         number,
                         "{:06x}".format(entry.st_value),

@@ -20,24 +20,30 @@ class Elf:
             self.header.getSectionHeaderNumber(),
             self.header.getStringTableIndex()
         )
-        self.symbolTable = SymbolTable(
-            elf,
-            self.header.getArchitecture(),
-            self.sectionHeader.entries,
-            self.sectionHeader.indexSYMTAB,
-            self.sectionHeader.indexSTRTAB,
-            self.header.getStringTableIndex(),
-            self.header.getSectionHeaderSize()
-        )
-        self.dynamicSymbolTable = SymbolTable(
-            elf,
-            self.header.getArchitecture(),
-            self.sectionHeader.entries,
-            self.sectionHeader.indexDYNSYM,
-            self.sectionHeader.indexDYNSTR,
-            self.header.getStringTableIndex(),
-            self.header.getSectionHeaderSize()
-        )
+        if self.sectionHeader.indexSYMTAB != -1:
+            self.symbolTable = SymbolTable(
+                elf,
+                self.header.getArchitecture(),
+                self.sectionHeader.entries,
+                self.sectionHeader.indexSYMTAB,
+                self.sectionHeader.indexSTRTAB,
+                self.header.getStringTableIndex(),
+                self.header.getSectionHeaderSize()
+            )
+        else:
+            print('There is no symbol table')
+        if self.sectionHeader.indexDYNSYM != -1:
+            self.dynamicSymbolTable = SymbolTable(
+                elf,
+                self.header.getArchitecture(),
+                self.sectionHeader.entries,
+                self.sectionHeader.indexDYNSYM,
+                self.sectionHeader.indexDYNSTR,
+                self.header.getStringTableIndex(),
+                self.header.getSectionHeaderSize()
+            )
+        else:
+            print('There is no dynamic symbol table')
 
 
 
