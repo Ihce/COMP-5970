@@ -67,14 +67,14 @@ class SectionHeader():
     # Iterates over the list of sections and returns the results from their respective fields.
     # Source: Visually inspecting readelf results
     def getSections(self):
-        print('\t%-5s %-16s %-13s %-8s %-8s %-8s %-4s %-6s %-4s %-5s %-6s' %('[Nr]', 'Name', 'Type', 'Addr', 'Off', 'Size', 'ES', 'Flag', 'Lk', 'Inf', 'Al'))
+        print('\t%-5s %-19s %-13s %-8s %-8s %-8s %-4s %-6s %-4s %-5s %-6s' %('[Nr]', 'Name', 'Type', 'Addr', 'Off', 'Size', 'ES', 'Flag', 'Lk', 'Inf', 'Al'))
         for index,entry in enumerate(self.entries):
             number = '[%s]'%(index)
             converted_flags = ''
             for key, value in shDictionary['Flags'].items():
                 if entry.sh_flags & key or entry.sh_flags == key:
                     converted_flags += value
-            print('\t%-5s %-16s %-13s %-8s %-8s %-8s %-4s %-6s %-4s %-5s %-6s' 
+            print('\t%-5s %-19s %-13s %-8s %-8s %-8s %-4s %-6s %-4s %-5s %-6s' 
                   %(
                     number, 
                     self.getSHStringTable(entry.sh_name), 

@@ -7,11 +7,14 @@ WORD = 4
 DOUBLEWORD = 8
 
 class SymbolTable():
+    # Initializes the program header object with attributes that are usable to create entries
     def __init__(self, elf, ei_class, sectionEntries, index_symbol_table, index_symbol_string_table, e_shstrndx, e_shentsize) -> None:
         self.elf = elf
         self.ei_class = ei_class
         self.sectionEntries = sectionEntries
+        # The index of the symbol table in the list of sections
         self.index_symbol_table = index_symbol_table
+        # The index of the string table in the list of section that corresponds to the symbol table
         self.index_symbol_string_table = index_symbol_string_table
         self.e_shentsize = e_shentsize
         self.e_shstrndx = e_shstrndx

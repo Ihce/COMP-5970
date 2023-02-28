@@ -44,12 +44,12 @@ def parseElf():
             print("\nThere is no dynamic symbol table")
 
 def msg():
-    return '''readelf <options> "full path to elf file"
+    return '''python main.py <options> "full path to elf file"
         -a --all              Display all information
         -H --header           Display the ELF file header
         -S --section          Display the section headers
         -l --program          Displays the program headers
-        -s --symbol           Displays the symbol table"
+        -s --symbol           Displays the symbol table
         -d --dynamicsymbol    Display the dynamic symbol table
     '''
 

@@ -1,1 +1,0 @@
-Extremely simple CLI that immitates a bit of what readelf can do!
