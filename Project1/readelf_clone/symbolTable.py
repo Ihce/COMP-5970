@@ -20,6 +20,7 @@ class SymbolTable():
         self.e_shstrndx = e_shstrndx
         self.entries = self.createEntries()
 
+    # Matches the valueKey (typically an attibute of the object) with the corresponding key in the corresponding dictionary
     def safeget(self, attributeKey, valueKey):
         try:
             message = stDictionary[attributeKey][valueKey]
@@ -27,6 +28,7 @@ class SymbolTable():
             return "Unknown"
         return message
 
+    # Creates and returns a list of entries that can be iterated over
     def createEntries(self):
         entryList = []
         currentOffset = 0
@@ -38,6 +40,8 @@ class SymbolTable():
                 currentOffset += 24
         return entryList
     
+    # Iterates over the list of entries and returns the results from their respective fields.
+    # Source: Visually inspecting readelf results
     def getSymbolTable(self):
         number = 0
         print('\t%-5s %-8s %-6s %-8s %-8s %-10s %-6s %-8s' %('Num:', 'Value', 'Size', 'Type', 'Bind', 'Vis', 'Ndx', 'Name'))
@@ -58,6 +62,12 @@ class SymbolTable():
             number = number + 1
 
     class SymbolEntry():
+        # Initializes a section header entry and unpacks the bytes sequentially with the corresponding size from documention
+        # Source: 
+        #    https://refspecs.linuxbase.org/elf/gabi4+/
+        #    https://wiki.osdev.org/ELF_Tutorial
+        #    https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+        #    https://man7.org/linux/man-pages/man5/elf.5.html
         def __init__(self, elf, ei_class, sectionEntries, index_table, index_string_table, currentOffset, e_shstrndx, e_shentsize) -> None:
             self.elf = elf
             self.ei_class = ei_class
@@ -90,6 +100,7 @@ class SymbolTable():
             else:
                 self.st_converted_name = self.getSTStringTable(self.st_name, self.index_string_table)
 
+         # Returns the corresponding string for the name offset in the string table
         def getSTStringTable(self, nameOffset, index_string_table):
             stringSectionObject = self.sectionEntries[index_string_table]
             self.elf.seek(stringSectionObject.sh_offset + nameOffset)
@@ -99,6 +110,7 @@ class SymbolTable():
                 return 'NULL'
             return output
         
+        # Returns the corresponding string for the name offset in the section header string table
         def getSHStringTable(self, sh_name):
             stringSectionObject = self.sectionEntries[self.e_shstrndx]
             self.elf.seek(stringSectionObject.sh_offset + sh_name)
